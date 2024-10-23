@@ -3,19 +3,12 @@
 
 # include <unistd.h>
 
-#ifndef BUFFER_H
-#define BUFFER_H
-
-#define BUFFER_SIZE 42
-
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 42
 #endif
 
-typedef struct s_list
-{
-	char			*string;
-	struct s_list	*next;
-}	t_list;
-
 char	*get_next_line(int fd);
+
+char	*ft_join(char const *s1, char const *s2);
 
 #endif

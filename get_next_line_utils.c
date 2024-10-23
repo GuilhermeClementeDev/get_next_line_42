@@ -1,57 +1,69 @@
 #include "get_next_line.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list	*tmp;
 
-	if (!lst || !new)
-		return ;
-	if (*lst == NULL)
-		*lst = new;
-	else
+static void	ft_strcat(char *dst, const char *src)
+{
+	int	i;
+	int	d;
+
+	d = 0;
+	i = 0;
+	while(dst[d])
+		d++;
+	while (src[i])
 	{
-		tmp = ft_lstlast(*lst);
-		tmp->next = new;
+		dst[d + i] = src[i];
+		i++;
 	}
-	new->next = NULL;
+	dst[d + i] = '\0';
 }
 
-t_list	*ft_lstlast(t_list *lst)
+char	*ft_join(char const *s1, char const *s2)
 {
-	if (lst == NULL)
-		return (NULL);
-	while (lst->next != NULL)
-		lst = lst->next;
-	return (lst);
-}
-t_list	*ft_lstnew(void *string)
-{
-	t_list	*tmp;
+	int	size;
+	char	*arr;
+	int	i;
 
-	tmp = (t_list *)malloc(sizeof(t_list));
-	if (!tmp)
-		return (NULL);
-	tmp->string = string;
-	tmp->next = NULL;
-	return (tmp);
-}
-void	ft_lstclear(t_list **lst)
-{
-	t_list	*tmp;
-
-	if (!lst || !*lst)
-		return ;
-	while (*lst)
+	i = 0;
+	size = 0;
+	while (s1[i])
+		i++;
+	while (s2[size])
+		size++;
+	arr = (char *)malloc((size + i) + 1);
+	if (arr != NULL)
 	{
-		tmp = (*lst)->next;
-		ft_lstdelone(*lst, free());
-		*lst = tmp;
+		ft_strcat(arr, s1);
+		ft_strcat(arr, s2);
+		return (arr);
 	}
-	*lst = NULL;
+	return (NULL);
 }
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+char	*ft_djoin(char const *s1, char const *s2, char *extra)
 {
-	del(lst->string);
-	free(lst);
-	lst = NULL;
+	int		i;
+	char	*new;
+	int		d;
+
+	d = 0;
+	i = 0;
+	new = (char *)malloc(BUFFER_SIZE + 1);
+	if (new == NULL)
+		return (NULL);
+	extra = (char *)malloc(BUFFER_SIZE + 1);
+	if (extra == NULL)
+		return (NULL);
+	extra[BUFFER_SIZE] = '\0';
+	while (s2[i] != '\n' && s2[i] != '\0')
+	{
+		new[i] = s2[i];
+		i++;
+	}
+	new[i] = '\0';
+	i++;
+	while (s2[i + d])
+	{
+		extra[d++] = s2[i + d];
+	}
+	return(ft_join(s1, new));
 }
