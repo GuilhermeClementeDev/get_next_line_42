@@ -1,6 +1,13 @@
 #include "get_next_line.h"
 
-int	ft_verify(char *s)
+char	*ft_free(char *tmp)
+{
+	free(tmp);
+	tmp = NULL;
+	return (tmp);
+}
+
+static int	ft_verify(char *s)
 {
 	int	i;
 
@@ -16,29 +23,47 @@ int	ft_verify(char *s)
 	return (0);
 }
 
+char	*read_f(int fd, char *tmp, char *cont)
+{
+	int	i;
+	int veri;
+	char *str;
+
+	i = 1;
+	veri = 0;
+	str = NULL;
+	while (i != 0)
+	{
+			i = read(fd, tmp, BUFFER_SIZE);
+			if (i == -1)
+				return (NULL);
+			veri = ft_verify(tmp);
+			if (veri == 1)
+			{
+				str = ft_djoin(str, tmp, cont);
+				i = 0;
+			}
+			else
+				str = ft_join(str, tmp);
+	}
+	return (str);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*extra = NULL;
+	static char	*cont;
 	char 		*tmp;
 	char		*string;
-	int			i;
 
-	i = 0;
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
 	tmp = (char *)malloc(BUFFER_SIZE + 1);
 	if (tmp == NULL)
 		return (NULL);
 	tmp[BUFFER_SIZE] = '\0';
-	while (i == 0)
-	{
-			if (read(fd, tmp, BUFFER_SIZE) == -1)
-				return (NULL);
-			i = ft_verify(tmp);
-			if (i == 1)
-				ft_djoin(tmp, extra);
-			else
-				string = ft_join(string, tmp);
-	}
+	string = read_f(fd, tmp, cont);
+	tmp = ft_free(tmp);
+	if (string == NULL)
+		return (NULL);
 	return (string);
 }

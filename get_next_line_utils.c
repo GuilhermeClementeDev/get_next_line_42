@@ -1,7 +1,7 @@
 #include "get_next_line.h"
 
 
-static void	ft_strcat(char *dst, const char *src)
+static void	ft_strcat(char *dst, char *src)
 {
 	int	i;
 	int	d;
@@ -17,8 +17,7 @@ static void	ft_strcat(char *dst, const char *src)
 	}
 	dst[d + i] = '\0';
 }
-
-char	*ft_join(char const *s1, char const *s2)
+char	*ft_join(char *s1, char *s2)
 {
 	int	size;
 	char	*arr;
@@ -39,21 +38,22 @@ char	*ft_join(char const *s1, char const *s2)
 	}
 	return (NULL);
 }
-char	*ft_djoin(char const *s1, char const *s2, char *extra)
+char	*ft_djoin(char *s1, char *s2, char *cont)
 {
 	int		i;
 	char	*new;
 	int		d;
+	char *result;
 
 	d = 0;
 	i = 0;
 	new = (char *)malloc(BUFFER_SIZE + 1);
 	if (new == NULL)
 		return (NULL);
-	extra = (char *)malloc(BUFFER_SIZE + 1);
-	if (extra == NULL)
+	cont = (char *)malloc(BUFFER_SIZE + 1);
+	if (cont == NULL)
 		return (NULL);
-	extra[BUFFER_SIZE] = '\0';
+	cont[BUFFER_SIZE] = '\0';
 	while (s2[i] != '\n' && s2[i] != '\0')
 	{
 		new[i] = s2[i];
@@ -63,7 +63,11 @@ char	*ft_djoin(char const *s1, char const *s2, char *extra)
 	i++;
 	while (s2[i + d])
 	{
-		extra[d++] = s2[i + d];
+		cont[d] = s2[i + d];
+		d++;
 	}
-	return(ft_join(s1, new));
+	cont[d] = '\0';
+	result = ft_join(s1, new);
+	ft_free(new);
+	return(result);
 }

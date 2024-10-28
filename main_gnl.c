@@ -10,6 +10,5 @@ int main()
 	fd = open("test.txt",O_RDONLY);
 	if (fd == -1)
 		return (printf("-1\n"));
-	get_next_line (fd);
-	get_next_line (fd);
+	printf("%s",get_next_line (fd));
 }
