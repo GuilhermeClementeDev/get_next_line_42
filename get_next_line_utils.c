@@ -1,5 +1,4 @@
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*ft_free(char *tmp)
 {
@@ -7,51 +6,64 @@ char	*ft_free(char *tmp)
 	tmp = NULL;
 	return (tmp);
 }
-static void	ft_strcat(char *dst, char *src)
+
+int	ft_strlen(char *s)
 {
 	int	i;
-	int	d;
 
-	d = 0;
 	i = 0;
-	if (!dst || !src)
-		return;
-	while(dst[d])
-		d++;
-	while (src[i])
-	{
-		dst[d + i] = src[i];
+	while (s[i])
 		i++;
+	return (i);
+}
+
+char	*ft_strdup(char *s)
+{
+	int				size;
+	char			*ptr;
+
+	size = ft_strlen(s);
+	ptr = (char *)malloc(size + 1);
+	if (ptr == NULL)
+		return (NULL);
+	ptr[size] = '\0';
+	size--;
+	while (size >= 0)
+	{
+		ptr[size] = s[size];
+		size--;
 	}
-	dst[d + i] = '\0';
+	return (ptr);
+}
+
+void	ft_cat(char *dst, char *src)
+{
+	int	i;
+	int d;
+
+	i = ft_strlen(dst);
+	d = 0;
+	while(src[d])
+	{
+		dst[i + d] = src[d];
+		d++;
+	}
+	dst[i + d] = '\0';
 }
 
 char	*ft_join(char *s1, char *s2)
 {
-	int	size;
-	char	*arr;
-	int	i;
+	unsigned int	size;
+	char			*arr;
 
-	if (!s2 || !s1)
-		return (NULL);
-	i = 0;
-	size = 0;
-	if(s1)
-	{
-		while (s1[i])
-			i++;
-	}
-	while (s2[size])
-		size++;
-	arr = (char *)malloc((size + i) + 1);
+	size = ft_strlen(s1) + ft_strlen(s2) + 1;
+	arr = (char *)malloc(size);
 	if (arr != NULL)
 	{
-		if (s1)
-		{
-			ft_strcat(arr, s1);
-				ft_free(s1);
-		}
-		ft_strcat(arr, s2);
+		arr[0] = '\0';
+		ft_cat(arr, s1);
+		s1 = ft_free(s1);
+		ft_cat(arr, s2);
 		return (arr);
 	}
 	return (NULL);

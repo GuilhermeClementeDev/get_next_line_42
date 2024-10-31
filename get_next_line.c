@@ -1,129 +1,97 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: guclemen <guclemen@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 09:51:33 by guclemen          #+#    #+#             */
-/*   Updated: 2024/10/29 09:51:37 by guclemen         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
-#include <stdio.h>
 
-static int	ft_verify(char *s)
+static char	*extract_l(char *cont)
+{
+	char	*new;
+	int		size;
+	char	*tmp;
+
+	size = 0;
+	while(cont[size] && cont[size] != '\n')
+		size++;
+	if (cont[size])
+	{
+		size++;
+		tmp = ft_strdup(&cont[size]);
+	}
+	else
+		tmp = ft_strdup("");
+	new = (char *)malloc(size + 1);
+	if (!new)
+		return (NULL);
+	new[size] = '\0';
+	size--;
+	while (size >= 0)
+	{
+		new[size] = cont[size];
+		size--;
+	}
+	cont = ft_free(cont);
+	cont = tmp;
+	printf("%s", cont);
+	return (new);
+}
+
+static int ft_verify(char *str)
 {
 	int	i;
 
 	i = 0;
-	//printf("\n%s", s);
-	while (s && s[i])
+	while (str[i])
 	{
-		if(s[i] == '\n')
+		if (str[i] == '\n')
 			return (1);
 		i++;
 	}
-	if (i < BUFFER_SIZE)
-		return (1);
 	return (0);
 }
 
-char	*read_f(int fd, char *cont)
+void	ft_putnull(int rz, char *tmp)
 {
-	int	i;
-	char *tmp;
-
-	i = 1;
-	tmp = (char *)malloc(BUFFER_SIZE + 1);
-	if (tmp == NULL)
-		return (NULL);
-	while (i > 0)
+	while(tmp[rz])
 	{
-		i = read(fd, tmp, BUFFER_SIZE);
-		if (i == -1)
-			return (NULL);
-		cont = ft_join(cont, tmp);
-		printf("%s", cont);
-		if (!cont)
-			return (NULL);
-		if(ft_verify(cont))
-		{
-			//printf("%s", "to aqui");
-			break ;
-		}
+		tmp[rz] = '\0';
+		rz++;
 	}
-	ft_free (tmp);
+}
+
+static char	*read_f(int fd, char *cont)
+{
+	int		rz;
+	char	*tmp;
+
+	rz = 1;
+	tmp = (char *)malloc(BUFFER_SIZE + 1);
+	if (!tmp)
+		return (NULL);
+	tmp[BUFFER_SIZE] = '\0';
+	while (rz != 0)
+	{
+		rz = read(fd, tmp, BUFFER_SIZE);
+		printf("%d %s\n", rz, tmp);
+		if (rz == -1)
+			return (NULL);
+		if (rz == 0)
+			break ;
+		if (rz < BUFFER_SIZE)
+			ft_putnull(rz, tmp);
+		if (!cont)
+			cont = ft_strdup("");
+		cont = ft_join(cont, tmp);
+		if (ft_verify(tmp))
+			break ;
+	}
+	tmp = ft_free(tmp);
 	return (cont);
 }
-static char	*ft_new_cont(char *cont)
-{
-	int		i;
-	char	*new;
-	int		start;
 
-	i = 0;
-	while (cont[i] && cont[i] != '\n')
-		i++;
-	if (cont[i] != '\n')
-		return(ft_free(cont));
-	start = i + 1;
-	while (cont[i])
-		i++;
-	new = (char *)malloc(i - start + 1);
-	if (new == NULL)
-		return (NULL);
-	i = 0;
-	while (cont[start])
-	{
-		new[i] = cont[start];
-		if(new[i] == '\n')
-		{
-			i++;
-			break;
-		}
-		i++;
-	}
-	new[i] = '\0';
-	ft_free (cont);
-	return (new);
-}
-static char	*extract_l(char *cont)
-{
-	int	i;
-	char	*new;
-
-	i = 0;
-	if (!cont)
-		return (NULL);
-	while (cont[i] && cont[i] != '\n')
-		i++;
-	if (cont[i] == '\n')
-		i++;
-	new = (char *)malloc(i + 1);
-	if (!new)
-		return (NULL);
-	new[i] = '\0';
-	i--;
-	while (i >= 0)
-	{
-		new[i] = cont[i];
-		i--;
-	}
-	cont = ft_new_cont(cont);
-	return (new);
-}
-
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	static char	*cont = NULL;
-	char		*string;
+	char	*string;
 
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
-	cont = malloc(1);
-	cont[0] = '\0';
 	cont = read_f(fd, cont);
 	string = extract_l(cont);
 	return (string);
