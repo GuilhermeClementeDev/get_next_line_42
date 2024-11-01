@@ -35,35 +35,37 @@ char	*ft_strdup(char *s)
 	}
 	return (ptr);
 }
-
-void	ft_cat(char *dst, char *src)
+void	*ft_memcpy(void *dest, const void *src, int n)
 {
-	int	i;
-	int d;
+	int			i;
+	unsigned char	*dst;
+	unsigned char	*fake_src;
 
-	i = ft_strlen(dst);
-	d = 0;
-	while(src[d])
+	i = 0;
+	dst = (unsigned char *)dest;
+	fake_src = (unsigned char *)src;
+	while (i < n)
 	{
-		dst[i + d] = src[d];
-		d++;
+		dst[i] = fake_src[i];
+		i++;
 	}
-	dst[i + d] = '\0';
+	return (dest);
 }
 
 char	*ft_join(char *s1, char *s2)
 {
-	unsigned int	size;
+	unsigned int	size1;
+	unsigned int	size2;
 	char			*arr;
 
-	size = ft_strlen(s1) + ft_strlen(s2) + 1;
-	arr = (char *)malloc(size);
+	size1 = ft_strlen(s1);
+	size2 = ft_strlen(s2);
+	arr = (char *)malloc(size1 + size2 + 1);
 	if (arr != NULL)
 	{
-		arr[0] = '\0';
-		ft_cat(arr, s1);
-		s1 = ft_free(s1);
-		ft_cat(arr, s2);
+		arr = (char *)ft_memcpy(arr, s1, size1);
+		ft_memcpy(arr + size1, s2, size2);
+		arr[size1 + size2] = '\0';
 		return (arr);
 	}
 	return (NULL);

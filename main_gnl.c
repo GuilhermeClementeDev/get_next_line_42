@@ -5,9 +5,19 @@
 
 int main()
 {
+
 	int	fd;
 	fd = open("test.txt",O_RDONLY);
 	if (fd == -1)
 		return (printf("-1\n"));
-	printf("\n%s",get_next_line (fd));
+	//get_next_line (fd);
+	char * test =get_next_line (fd);
+	test =get_next_line (fd);
+	printf("!-%s",test);
+	test =get_next_line (fd);
+	printf("!-%s",test);
+	free(test);
+
+	return 0;
+
 }

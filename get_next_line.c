@@ -1,34 +1,43 @@
 #include "get_next_line.h"
 
-static char	*extract_l(char *cont)
+char	*ft_newstr(char *s)
+{
+	int		size;
+	char	*new;
+
+	size = 0;
+	while (s[size] != '\n')
+		size++;
+	new =(char *)malloc(size + 2);
+	if (!new)
+		return (ft_free(s));
+	new[size + 1] = '\0';
+	new = (char *)ft_memcpy(new, s, size);
+	s = ft_free(s);
+	return(new);
+}
+static char	*extract_l(char *s)
 {
 	char	*new;
 	int		size;
-	char	*tmp;
+	int		i;
 
+	i = 0;
 	size = 0;
-	while(cont[size] && cont[size] != '\n')
+	while(s[size] && s[size] != '\n')
 		size++;
-	if (cont[size])
-	{
-		size++;
-		tmp = ft_strdup(&cont[size]);
-	}
-	else
-		tmp = ft_strdup("");
-	new = (char *)malloc(size + 1);
+	if (!s[size])
+		return (NULL);
+	new = (char *)malloc((ft_strlen(s) - (size + 1)) + 1);
 	if (!new)
 		return (NULL);
-	new[size] = '\0';
-	size--;
-	while (size >= 0)
+	size++;
+	while(s[size + i])
 	{
-		new[size] = cont[size];
-		size--;
+		new[i] = s[size + i];
+		i++;
 	}
-	cont = ft_free(cont);
-	cont = tmp;
-	printf("%s", cont);
+	new[i] = '\0';
 	return (new);
 }
 
@@ -37,7 +46,7 @@ static int ft_verify(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] != '\0')
 	{
 		if (str[i] == '\n')
 			return (1);
@@ -46,53 +55,50 @@ static int ft_verify(char *str)
 	return (0);
 }
 
-void	ft_putnull(int rz, char *tmp)
-{
-	while(tmp[rz])
-	{
-		tmp[rz] = '\0';
-		rz++;
-	}
-}
-
-static char	*read_f(int fd, char *cont)
+static char	*read_f(int fd, char *tmp, char *cont)
 {
 	int		rz;
-	char	*tmp;
+	char	*old_cont;
 
 	rz = 1;
-	tmp = (char *)malloc(BUFFER_SIZE + 1);
-	if (!tmp)
-		return (NULL);
-	tmp[BUFFER_SIZE] = '\0';
 	while (rz != 0)
 	{
 		rz = read(fd, tmp, BUFFER_SIZE);
-		printf("%d %s\n", rz, tmp);
 		if (rz == -1)
 			return (NULL);
 		if (rz == 0)
 			break ;
-		if (rz < BUFFER_SIZE)
-			ft_putnull(rz, tmp);
+		tmp[rz] = '\0';
 		if (!cont)
 			cont = ft_strdup("");
-		cont = ft_join(cont, tmp);
+		old_cont = cont;
+		cont = ft_join(old_cont, tmp);
+		old_cont = ft_free(old_cont);
 		if (ft_verify(tmp))
 			break ;
 	}
-	tmp = ft_free(tmp);
 	return (cont);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*cont = NULL;
+	static char	*cont;
 	char	*string;
+	char	*tmp;
 
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
-	cont = read_f(fd, cont);
-	string = extract_l(cont);
+	tmp = (char *)malloc(BUFFER_SIZE + 1);
+	if (!tmp)
+		return (NULL);
+	string = read_f(fd, tmp, cont);
+	tmp = ft_free(tmp);
+	if (!string)
+		return (NULL);
+	cont = extract_l(string);
+	if (cont && cont[0] != '\0')
+		string = ft_newstr(string);
+	if (cont && cont[0] == '\0')
+		cont = ft_free(cont);
 	return (string);
 }
