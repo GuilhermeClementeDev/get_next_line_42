@@ -12,10 +12,17 @@ int main()
 		return (printf("-1\n"));
 	//get_next_line (fd);
 	char * test =get_next_line (fd);
+	int i = 0;
+	while (test[i])
+	{
+		printf(" %d-%c", i, test[i]);
+		i++;
+	}
+	//printf("!-%s",test);
 	test =get_next_line (fd);
-	printf("!-%s",test);
+	//printf("!-%s",test);
 	test =get_next_line (fd);
-	printf("!-%s",test);
+	//printf("!-%s",test);
 	free(test);
 
 	return 0;

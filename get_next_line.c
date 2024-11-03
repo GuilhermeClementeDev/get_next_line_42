@@ -6,13 +6,15 @@ char	*ft_newstr(char *s)
 	char	*new;
 
 	size = 0;
-	while (s[size] != '\n')
+	if (!s)
+		return(NULL);
+	while (s[size] && s[size] != '\n')
 		size++;
 	new =(char *)malloc(size + 2);
 	if (!new)
 		return (ft_free(s));
-	new[size + 1] = '\0';
 	new = (char *)ft_memcpy(new, s, size);
+	new[size + 1] = '\0';
 	s = ft_free(s);
 	return(new);
 }
@@ -20,24 +22,22 @@ static char	*extract_l(char *s)
 {
 	char	*new;
 	int		size;
-	int		i;
+	int		size_math;
 
-	i = 0;
 	size = 0;
+	if (!s)
+		return (NULL);
 	while(s[size] && s[size] != '\n')
 		size++;
 	if (!s[size])
 		return (NULL);
-	new = (char *)malloc((ft_strlen(s) - (size + 1)) + 1);
+	size_math = (ft_strlen(s) - (size + 1)) + 1;
+	new = (char *)malloc(size_math);
 	if (!new)
 		return (NULL);
 	size++;
-	while(s[size + i])
-	{
-		new[i] = s[size + i];
-		i++;
-	}
-	new[i] = '\0';
+	new =(char *)ft_memcpy(new, &s[size], size_math);
+	new[size_math - 1] = '\0';
 	return (new);
 }
 
@@ -82,10 +82,11 @@ static char	*read_f(int fd, char *tmp, char *cont)
 
 char	*get_next_line(int fd)
 {
-	static char	*cont;
+	static char	*cont = NULL;
 	char	*string;
 	char	*tmp;
 
+	string = NULL;
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
 	tmp = (char *)malloc(BUFFER_SIZE + 1);
