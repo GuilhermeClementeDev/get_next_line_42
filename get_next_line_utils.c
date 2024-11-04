@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: guclemen <guclemen@student.42.rio>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/04 13:34:06 by guclemen          #+#    #+#             */
+/*   Updated: 2024/11/04 13:34:07 by guclemen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*ft_free(char *tmp)
@@ -35,9 +47,10 @@ char	*ft_strdup(char *s)
 	}
 	return (ptr);
 }
+
 void	*ft_memcpy(void *dest, const void *src, int n)
 {
-	int			i;
+	int				i;
 	unsigned char	*dst;
 	unsigned char	*fake_src;
 

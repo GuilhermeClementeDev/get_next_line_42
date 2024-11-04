@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: guclemen <guclemen@student.42.rio>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/04 13:33:54 by guclemen          #+#    #+#             */
+/*   Updated: 2024/11/04 13:33:56 by guclemen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*ft_newstr(char *s)
@@ -16,6 +28,7 @@ char	*ft_newstr(char *s)
 	s = ft_free(s);
 	return (str);
 }
+
 static char	*extract_l(char *s)
 {
 	int		size;
@@ -35,7 +48,7 @@ static char	*extract_l(char *s)
 	return (str);
 }
 
-static int ft_verify(char *str)
+static int	ft_verify(char *str)
 {
 	int	i;
 
@@ -78,8 +91,8 @@ static char	*read_f(int fd, char *tmp, char *cont)
 char	*get_next_line(int fd)
 {
 	static char	*cont;
-	char	*string;
-	char	*tmp;
+	char		*string;
+	char		*tmp;
 
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
