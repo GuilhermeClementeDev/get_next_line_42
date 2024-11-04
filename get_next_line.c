@@ -2,43 +2,37 @@
 
 char	*ft_newstr(char *s)
 {
+	char	*str;
 	int		size;
-	char	*new;
 
 	size = 0;
-	if (!s)
-		return(NULL);
 	while (s[size] && s[size] != '\n')
 		size++;
-	new =(char *)malloc(size + 2);
-	if (!new)
-		return (ft_free(s));
-	new = (char *)ft_memcpy(new, s, size);
-	new[size + 1] = '\0';
+	str = (char *)malloc(sizeof(char) * (size + 2));
+	if (!str)
+		return (NULL);
+	str = ft_memcpy(str, s, size + 1);
+	str[size + 1] = '\0';
 	s = ft_free(s);
-	return(new);
+	return (str);
 }
 static char	*extract_l(char *s)
 {
-	char	*new;
 	int		size;
-	int		size_math;
+	char	*str;
+	int		full_size;
 
 	size = 0;
-	if (!s)
-		return (NULL);
-	while(s[size] && s[size] != '\n')
+	while (s[size] && s[size] != '\n')
 		size++;
-	if (!s[size])
+	if (s[size] == '\0')
 		return (NULL);
-	size_math = (ft_strlen(s) - (size + 1)) + 1;
-	new = (char *)malloc(size_math);
-	if (!new)
+	full_size = (ft_strlen(s) - (size));
+	str = (char *)malloc(sizeof(char) * full_size);
+	if (!str)
 		return (NULL);
-	size++;
-	new =(char *)ft_memcpy(new, &s[size], size_math);
-	new[size_math - 1] = '\0';
-	return (new);
+	str = ft_memcpy(str, &s[size + 1], full_size);
+	return (str);
 }
 
 static int ft_verify(char *str)
@@ -61,6 +55,7 @@ static char	*read_f(int fd, char *tmp, char *cont)
 	char	*old_cont;
 
 	rz = 1;
+	old_cont = NULL;
 	while (rz != 0)
 	{
 		rz = read(fd, tmp, BUFFER_SIZE);
@@ -82,11 +77,10 @@ static char	*read_f(int fd, char *tmp, char *cont)
 
 char	*get_next_line(int fd)
 {
-	static char	*cont = NULL;
+	static char	*cont;
 	char	*string;
 	char	*tmp;
 
-	string = NULL;
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
 	tmp = (char *)malloc(BUFFER_SIZE + 1);
@@ -97,9 +91,9 @@ char	*get_next_line(int fd)
 	if (!string)
 		return (NULL);
 	cont = extract_l(string);
-	if (cont && cont[0] != '\0')
+	if (cont && *cont != '\0')
 		string = ft_newstr(string);
-	if (cont && cont[0] == '\0')
+	if (cont && *cont == '\0')
 		cont = ft_free(cont);
 	return (string);
 }

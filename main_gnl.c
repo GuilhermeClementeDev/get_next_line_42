@@ -11,20 +11,23 @@ int main()
 	if (fd == -1)
 		return (printf("-1\n"));
 	//get_next_line (fd);
-	char * test =get_next_line (fd);
-	int i = 0;
-	while (test[i])
+	char * test = NULL;
+	test = get_next_line (fd);
+	/*while (test)
 	{
-		printf(" %d-%c", i, test[i]);
-		i++;
-	}
+		printf(":%s:\n", test);
+		free(test);
+		test = get_next_line(fd);
+	}*/
+	printf("!-%s",test);
+	//free(test);
+	//test = get_next_line (fd);
 	//printf("!-%s",test);
-	test =get_next_line (fd);
+	//free(test);
+	//test = get_next_line (fd);
 	//printf("!-%s",test);
-	test =get_next_line (fd);
-	//printf("!-%s",test);
-	free(test);
-
+	if (test)
+		free(test);
 	return 0;
 
 }

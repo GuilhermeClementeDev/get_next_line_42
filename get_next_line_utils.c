@@ -23,7 +23,7 @@ char	*ft_strdup(char *s)
 	char			*ptr;
 
 	size = ft_strlen(s);
-	ptr = (char *)malloc(size + 1);
+	ptr = (char *)malloc(sizeof(char) * (size + 1));
 	if (ptr == NULL)
 		return (NULL);
 	ptr[size] = '\0';
@@ -60,7 +60,7 @@ char	*ft_join(char *s1, char *s2)
 
 	size1 = ft_strlen(s1);
 	size2 = ft_strlen(s2);
-	arr = (char *)malloc(size1 + size2 + 1);
+	arr = (char *)malloc(sizeof(char) * (size1 + size2 + 1));
 	if (arr != NULL)
 	{
 		arr = (char *)ft_memcpy(arr, s1, size1);
