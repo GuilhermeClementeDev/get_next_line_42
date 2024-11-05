@@ -33,6 +33,4 @@ char	*ft_strdup(char *s);
 
 void	*ft_memcpy(void *dest, const void *src, int n);
 
-void	*ft_calloc(size_t nmemb, size_t size);
-
 #endif

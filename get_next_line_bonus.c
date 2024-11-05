@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: guclemen <guclemen@student.42.rio>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 13:33:54 by guclemen          #+#    #+#             */
-/*   Updated: 2024/11/04 13:33:56 by guclemen         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*ft_newstr(char *s)
 {
@@ -90,23 +78,23 @@ static char	*read_f(int fd, char *tmp, char *cont)
 
 char	*get_next_line(int fd)
 {
-	static char	*cont;
+	static char	*cont[1024];
 	char		*string;
 	char		*tmp;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd > 1024)
 		return (NULL);
 	tmp = (char *)malloc(BUFFER_SIZE + 1);
 	if (!tmp)
 		return (NULL);
-	string = read_f(fd, tmp, cont);
+	string = read_f(fd, tmp, cont[fd]);
 	tmp = ft_free(tmp);
 	if (!string)
 		return (NULL);
-	cont = extract_l(string);
-	if (cont && *cont != '\0')
+	cont[fd] = extract_l(string);
+	if (cont[fd] && *cont[fd] != '\0')
 		string = ft_newstr(string);
-	if (cont && *cont == '\0')
-		cont = ft_free(cont);
+	if (cont[fd] && *cont[fd] == '\0')
+		cont[fd] = ft_free(cont[fd]);
 	return (string);
 }
